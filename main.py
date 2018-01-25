@@ -6,7 +6,6 @@ import life.pattern_importer as pattern_importer
 
 import easygui
 
-
 GRID_LINES_COLOR = "#ccd1d1"
 FONT_COLOR = "#17202a"  # "#424949"
 CELL_COLOR = "#17202a"
@@ -79,7 +78,6 @@ def draw_pattern(surf, pattern, position, cell_size):
                       w * cell_size, h * cell_size), 1)
 
 
-
 def draw_grid_lines(surf, cell_size):
     """Draw lines separating grid cells on surface"""
     for i in range(H + 1):
@@ -100,12 +98,12 @@ def draw_game_info_area(surf, size):
     # upper line
     pygame.draw.line(surf, pygame.Color(BOX_COLOR),
                      (size + 0.5 * MARGIN, MARGIN + 1.5 * FONT_SIZE * FONT_LINE_SPACING),
-                     (size + LEGEND_SIZE,  MARGIN + 1.5 * FONT_SIZE * FONT_LINE_SPACING), 2)
+                     (size + LEGEND_SIZE, MARGIN + 1.5 * FONT_SIZE * FONT_LINE_SPACING), 2)
 
     # pygame.draw.line(surf, pygame.Color(BOX_COLOR),
     #                  (size + 0.5 * MARGIN, MARGIN + 15.5 * FONT_SIZE * FONT_LINE_SPACING),
     #                  (size + LEGEND_SIZE, MARGIN + 15.5 * FONT_SIZE * FONT_LINE_SPACING), 2)
-    #lower line
+    # lower line
     pygame.draw.line(surf, pygame.Color(BOX_COLOR),
                      (size + 0.5 * MARGIN, size - 11.5 * FONT_SIZE * FONT_LINE_SPACING - MARGIN),
                      (size + LEGEND_SIZE, size - 11.5 * FONT_SIZE * FONT_LINE_SPACING - MARGIN), 2)
@@ -116,7 +114,9 @@ def display_game_info(surf, font, size, play):
     # TODO: height shouldn't be const
     game_info = GAME_INFO_PLAY if play else GAME_INFO_PAUSE
     for i, line in enumerate(game_info.splitlines()):
-        surf.blit(font.render(line, 1, Color(FONT_COLOR)), (size + 1.5 * MARGIN, MARGIN + i * FONT_SIZE * FONT_LINE_SPACING))
+        surf.blit(font.render(line, 1, Color(FONT_COLOR)),
+                  (size + 1.5 * MARGIN, MARGIN + i * FONT_SIZE * FONT_LINE_SPACING))
+
 
 # TODO: do usuniecia (przeniesione do debug)
 # def display_fps(surf, font, fps, size):
@@ -151,7 +151,7 @@ def add_cell(grid, position, cell_size):
 
 def erase_cell(grid, position, cell_size):
     x_grid, y_grid = grid_operations.mouse_to_grid_position(position, cell_size)
-    grid[y_grid , x_grid] = 0
+    grid[y_grid, x_grid] = 0
 
 
 def is_point_on_grid(position, cell_size):
@@ -183,7 +183,8 @@ def main():
 
     # determining surface size, etc.
     display_info = pygame.display.Info()  # create a video display information object
-    screen_min_size = (display_info.current_w if display_info.current_w < display_info.current_h else display_info.current_h) * 0.88
+    screen_min_size = (
+                      display_info.current_w if display_info.current_w < display_info.current_h else display_info.current_h) * 0.88
     cell_size = int(screen_min_size / GRID_CELLS)
     size = cell_size * GRID_CELLS
     surface_size = (size + LEGEND_SIZE, size)
@@ -258,7 +259,13 @@ def main():
                     if (pattern_imported and
                             is_pattern_on_grid(grid_now, pattern, event.pos, cell_size)):
                         if event.button == 1:  # LEFT=1
-                            grid_operations.insert_pattern_into_grid(pattern, grid_now, grid_operations.mouse_to_grid_position(event.pos, cell_size))
+                            if not grid_operations.insert_pattern_into_grid(pattern, grid_now,
+                                                                            grid_operations.mouse_to_grid_position(
+                                                                                event.pos, cell_size)):
+                                h, w = pattern.shape
+                                easygui.msgbox(
+                                    "Pattern shape ({}x{}) is too big for this grid ({}x{})".format(h, w, H, W),
+                                    "Warning!")
                         elif event.button == 3:  # RIGHT=3
                             pattern_imported = False
 
@@ -313,7 +320,6 @@ def main():
                 draw_pattern(surface, pattern, position, cell_size)
             elif is_point_on_grid(position, cell_size):
                 draw_cell_at_cursor(surface, position, cell_size)
-
 
         # *after* drawing everything, flip the display
         pygame.display.flip()
