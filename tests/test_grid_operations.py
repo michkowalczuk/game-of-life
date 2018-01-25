@@ -107,6 +107,17 @@ class TestGridOperations(unittest.TestCase):
         x_grid, y_grid = grid_operations.mouse_to_grid_position((x, y), cell_size)
         self.assertEqual((x_grid, y_grid), (0, 2))
 
+    def test_insert_pattern_into_grid(self):
+        test_grid = grid_operations.create_empty_grid(5, 5)
+        test_pattern = np.ones((3, 3), dtype=np.int32)
+        grid_operations.insert_pattern_into_grid(test_pattern, test_grid, (1, 1))
+        out_grid = np.array([[0, 0, 0, 0, 0],
+                             [0, 1, 1, 1, 0],
+                             [0, 1, 1, 1, 0],
+                             [0, 1, 1, 1, 0],
+                             [0, 0, 0, 0, 0]])
+        self.assertTrue(np.all(np.equal(test_grid, out_grid)))
+
 
 if __name__ == '__main__':
     unittest.main()
