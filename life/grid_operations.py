@@ -78,3 +78,13 @@ def mouse_to_grid_position(position, cell_size):
     x_grid = int(x / cell_size)
     y_grid = int(y / cell_size)
     return x_grid, y_grid
+
+
+def insert_pattern_into_grid(pattern, grid, grid_position):
+    (y, x) = pattern.shape
+    (m, n) = grid.shape
+    if 0 < y <= m and 0 < x <= n:
+        grid[grid_position[1]: grid_position[1] + y, grid_position[0]: grid_position[0] + x] = pattern
+    else:
+        # TODO: give error info
+        pass
