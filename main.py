@@ -184,7 +184,7 @@ def main():
     # determining surface size, etc.
     display_info = pygame.display.Info()  # create a video display information object
     screen_min_size = (
-                      display_info.current_w if display_info.current_w < display_info.current_h else display_info.current_h) * 0.88
+                          display_info.current_w if display_info.current_w < display_info.current_h else display_info.current_h) * 0.88
     cell_size = int(screen_min_size / GRID_CELLS)
     size = cell_size * GRID_CELLS
     surface_size = (size + LEGEND_SIZE, size)
@@ -235,18 +235,22 @@ def main():
                     debug = not debug
                 elif event.key == pygame.K_i and not play:
                     pattern_file = easygui.fileopenbox(
-                        msg="chose pattern file",
+                        msg="Chose pattern file",
                         title="Open file",
                         default="*.rle")
                     # filetypes=["*.rle"])
                     if pattern_file is not None:
                         pattern = pattern_importer.import_rle(pattern_file)
-                        h, w = pattern.shape
-                        if 0 < h <= H and 0 < w <= W:
-                            pattern_imported = True
+                        if pattern is not None:
+                            h, w = pattern.shape
+                            if 0 < h <= H and 0 < w <= W:
+                                pattern_imported = True
+                            else:
+                                easygui.msgbox(
+                                    "Pattern shape ({}x{}) is too big for this grid ({}x{})".format(h, w, H, W),
+                                    "Warning!")
                         else:
-                            easygui.msgbox("Pattern shape ({}x{}) is too big for this grid ({}x{})".format(h, w, H, W),
-                                           "Warning!")
+                            easygui.msgbox("There was error during importing file:\n{}".format(pattern_file), "Error!")
                 elif event.key == pygame.K_DOWN:
                     fps = fps - 1 if fps > FPS_MIN else FPS_MIN
                 elif event.key == pygame.K_UP:

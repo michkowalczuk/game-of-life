@@ -15,11 +15,6 @@ def import_pattern(pattern_file, grid, grid_position=(1, 1)):
             2 dimensional grid
         grid_position : tuple(int, int)
             grid index for insert pattern
-
-        Returns
-        -------
-        out : bool
-            true if insert went correctly
     """
     pattern = import_rle(pattern_file)
     if pattern is not None:
@@ -57,7 +52,8 @@ def import_rle(rle_file):
                 continue
             parse_rle_line(pattern, line, i, j, digits)
     except Exception as e:
-        easygui.msgbox("There was error during importing file:\n{}".format(e), "Error!")
+        print("There was error during importing file:\n{}".format(e))
+
     finally:
         file.close()
     return pattern
