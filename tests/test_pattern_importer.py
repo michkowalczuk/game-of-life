@@ -44,10 +44,6 @@ class TestPatternImporter(unittest.TestCase):
                                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
                                   [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
                                   [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1]])
-
-        print(pattern_from_rle)
-        print(two_fumaroles)
-
         self.assertTrue(np.all(np.equal(pattern_from_rle, two_fumaroles)))
 
     def test_import_rle_none(self):
@@ -69,7 +65,7 @@ class TestPatternImporter(unittest.TestCase):
     def test_parse_rle_line(self):
         pattern_from_line = np.zeros((7, 7), dtype=np.int32)
         rle_line = r'2b2o3b$bobo3b$o2bob2o$2obo2bo$bobo3b$bo2bo2b$2b2o!'
-        pattern_importer.parse_rle_line(pattern_from_line, rle_line, 0, 0, "")
+        pattern_importer.parse_rle_line(pattern_from_line, rle_line, (0, 0), "")
         beacon_pattern = np.array([[0, 0, 1, 1, 0, 0, 0],
                                    [0, 1, 0, 1, 0, 0, 0],
                                    [1, 0, 0, 1, 0, 1, 1],

@@ -50,7 +50,7 @@ def import_rle(rle_file):
                 y = int(xy_words[2].split(",")[0])
                 pattern = np.zeros((y, x), dtype=np.int32)
                 continue
-            parse_rle_line(pattern, line, i, j, digits)
+            (i, j) = parse_rle_line(pattern, line, (i, j), digits)
     except Exception as e:
         print("There was error during importing file:\n{}".format(e))
 
@@ -59,9 +59,9 @@ def import_rle(rle_file):
     return pattern
 
 
-def parse_rle_line(pattern, line, i, j, digits):
+def parse_rle_line(pattern, line, index, digits):
     """
-        Parse line from RKE-file
+        Parse line from RLE-file
 
         Parameters
         ----------
@@ -69,13 +69,12 @@ def parse_rle_line(pattern, line, i, j, digits):
             2 dimensional array for storing pattern
         line : str
             line from RLE-file
-        i : int
-            index for storing current vertical index
-        j : int
-            index for storing current horizontal index
+        index : tuple(int, int)
+            current (i - vertical, j - horizontal) index in pattern array
         digits : str
             string for dead/live cell counter in RLE-file
     """
+    (i, j) = index
     for char in line:
         if char == "$":  # next line
             i += 1
@@ -94,6 +93,7 @@ def parse_rle_line(pattern, line, i, j, digits):
             pattern[i, j: j + count] = 1
             j += count
             digits = ""
+    return i, j
 
 
 def parse_rle_digits(digits):
