@@ -23,12 +23,32 @@ class TestPatternImporter(unittest.TestCase):
 
         self.assertTrue(np.all(np.equal(grid, grid_with_glider)))
 
-    def test_import_rle(self):
+    def test_import_rle_oneline(self):
         pattern_from_rle = pattern_importer.import_rle(r'tests\patterns\glider.rle')
         glider = np.array([[0, 1, 0],
                            [0, 0, 1],
                            [1, 1, 1]])
         self.assertTrue(np.all(np.equal(pattern_from_rle, glider)))
+
+    def test_import_rle_multiline(self):
+        pattern_from_rle = pattern_importer.import_rle(r'tests\patterns\2fumaroles.rle')
+        two_fumaroles = np.array([[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                  [1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                  [0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                  [0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                  [0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+                                  [1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                                  [1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                                  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+                                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+                                  [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+                                  [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1]])
+
+        print(pattern_from_rle)
+        print(two_fumaroles)
+
+        self.assertTrue(np.all(np.equal(pattern_from_rle, two_fumaroles)))
 
     def test_import_rle_none(self):
         pattern_fake = pattern_importer.import_rle(r'tests\patterns\fake.rle')
