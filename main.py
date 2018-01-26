@@ -7,7 +7,7 @@ import life.pattern_importer as pattern_importer
 import easygui
 
 GRID_LINES_COLOR = "#ccd1d1"
-FONT_COLOR = "#17202a"  # "#424949"
+FONT_COLOR = "#17202a"
 CELL_COLOR = "#17202a"
 CURSOR_COLOR = "#3498db"
 PATTERN_COLOR = "#2ecc71"
@@ -63,7 +63,6 @@ def draw_grid(surf, grid, cell_size):
 
 def draw_pattern(surf, pattern, position, cell_size):
     """Draw pattern preview on surface"""
-    # x, y = position
     x_grid, y_grid = grid_operations.mouse_to_grid_position(position, cell_size)
     h, w = pattern.shape
     for i in range(h):
@@ -99,10 +98,6 @@ def draw_game_info_area(surf, size):
     pygame.draw.line(surf, pygame.Color(BOX_COLOR),
                      (size + 0.5 * MARGIN, MARGIN + 1.5 * FONT_SIZE * FONT_LINE_SPACING),
                      (size + LEGEND_SIZE, MARGIN + 1.5 * FONT_SIZE * FONT_LINE_SPACING), 2)
-
-    # pygame.draw.line(surf, pygame.Color(BOX_COLOR),
-    #                  (size + 0.5 * MARGIN, MARGIN + 15.5 * FONT_SIZE * FONT_LINE_SPACING),
-    #                  (size + LEGEND_SIZE, MARGIN + 15.5 * FONT_SIZE * FONT_LINE_SPACING), 2)
     # lower line
     pygame.draw.line(surf, pygame.Color(BOX_COLOR),
                      (size + 0.5 * MARGIN, size - 11.5 * FONT_SIZE * FONT_LINE_SPACING - MARGIN),
@@ -116,11 +111,6 @@ def display_game_info(surf, font, size, play):
     for i, line in enumerate(game_info.splitlines()):
         surf.blit(font.render(line, 1, Color(FONT_COLOR)),
                   (size + 1.5 * MARGIN, MARGIN + i * FONT_SIZE * FONT_LINE_SPACING))
-
-
-# TODO: do usuniecia (przeniesione do debug)
-# def display_fps(surf, font, fps, size):
-#     surf.blit(font.render("FPS: {}".format(fps), 1, Color(FONT_COLOR)), (size + MARGIN, size - 2 * FONT_SIZE))
 
 
 def display_debug(surf, font, debug_info, size):
@@ -176,15 +166,14 @@ def is_pattern_on_grid(grid, pattern, position, cell_size):
 def main():
     # PyGame initialization
     os.environ['SDL_VIDEO_CENTERED'] = '1'  # centers window, must be before pygame.init()!
-    pygame.init()  # initialize pygame
+    pygame.init()
     font = pygame.font.SysFont("consolas", FONT_SIZE)
     clock = pygame.time.Clock()
     fps = FPS
 
     # determining surface size, etc.
-    display_info = pygame.display.Info()  # create a video display information object
-    screen_min_size = (
-                          display_info.current_w if display_info.current_w < display_info.current_h else display_info.current_h) * 0.88
+    display = pygame.display.Info()  # create a video display information object
+    screen_min_size = (display.current_w if display.current_w < display.current_h else display.current_h) * 0.88
     cell_size = int(screen_min_size / GRID_CELLS)
     size = cell_size * GRID_CELLS
     surface_size = (size + LEGEND_SIZE, size)
@@ -201,18 +190,13 @@ def main():
     debug = False
     show_grid_lines = True if GRID_CELLS <= 100 else False
     pattern_imported = False
-    # left_button_pressed = False
-    # grid_is_empty = is_empty(grid_now)
     iteration = 1
-    # mouse_x, mouse_y = 0, 0
     position = (0, 0)
     while running:
         # keep loop running at the right speed
         clock.tick(fps)
         iteration += 1
         pygame.display.set_caption("The Game Of Life [iteration: {} fps: {:.1f}]".format(iteration, clock.get_fps()))
-
-        # grid_is_empty = is_empty(grid_now)
 
         # PROCESS INPUT (EVENTS)
         for event in pygame.event.get():
@@ -230,7 +214,6 @@ def main():
                     grid_operations.clear_grid(grid_now)
                 elif event.key == pygame.K_r:
                     grid_now = grid_operations.create_random_grid(W, H)
-                    # grid_is_empty = False
                 elif event.key == pygame.K_d:
                     debug = not debug
                 elif event.key == pygame.K_i and not play:
@@ -238,7 +221,6 @@ def main():
                         msg="Chose pattern file",
                         title="Open file",
                         default="*.rle")
-                    # filetypes=["*.rle"])
                     if pattern_file is not None:
                         pattern = pattern_importer.import_rle(pattern_file)
                         if pattern is not None:
@@ -296,9 +278,7 @@ def main():
         surface.fill(Color('white'))
         draw_game_info_area(surface, size)
         display_game_info(surface, font, size, play)
-        # display_fps(surface, font, fps, size)
         if debug:
-            # debug_info = (running, play, debug, show_grid_lines, pattern_imported, position, size, cell_size)
             debug_info = {
                 "FPS": fps,
                 "RUNNING": running,

@@ -53,9 +53,7 @@ def clear_grid(grid):
             2 dimensional grid
 
     """
-    """fill grid with value 0"""
     grid.fill(0)
-    # grid[:, :] = 0
 
 
 @jit

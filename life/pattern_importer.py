@@ -1,5 +1,4 @@
 import numpy as np
-import easygui
 from life.grid_operations import insert_pattern_into_grid
 
 
@@ -28,7 +27,7 @@ def import_rle(rle_file):
         Parameters
         ----------
         rle_file : str
-            pattern RLE-file ppattern
+            pattern RLE-file pattern
 
         Returns
         -------
@@ -37,7 +36,6 @@ def import_rle(rle_file):
     """
     file = open(rle_file, "r")
     i, j = 0, 0
-    # x, y = 0, 0
     digits = ""
     pattern = None
     try:
