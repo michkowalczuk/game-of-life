@@ -110,7 +110,5 @@ def parse_rle_digits(digits):
             number of dead/live cells
     """
     if digits != "" and digits.isdigit():
-        count = int(digits)
-    else:
-        count = 1
-    return count
+        return int(digits)
+    return 1

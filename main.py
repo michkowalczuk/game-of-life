@@ -17,9 +17,9 @@ BOX_COLOR = FONT_COLOR
 W = H = GRID_CELLS = 100
 MARGIN = 20
 LEGEND_SIZE = 300
-FPS = 10
-FPS_MIN = 1
-FPS_MAX = 20
+GPS = 10  # generations per second
+GPS_MIN = 1
+GPS_MAX = 20
 FONT_SIZE = 18
 FONT_LINE_SPACING = 1.15
 
@@ -146,7 +146,7 @@ def erase_cell(grid, position, cell_size):
 
 def is_point_on_grid(position, cell_size):
     x, y = position
-    if 0 < x <= W * cell_size and 0 < y <= H * cell_size:
+    if x <= W * cell_size and y <= H * cell_size:
         return True
     else:
         return False
@@ -169,7 +169,7 @@ def main():
     pygame.init()
     font = pygame.font.SysFont("consolas", FONT_SIZE)
     clock = pygame.time.Clock()
-    fps = FPS
+    gps = GPS
 
     # determining surface size, etc.
     display = pygame.display.Info()  # create a video display information object
@@ -194,7 +194,7 @@ def main():
     position = (0, 0)
     while running:
         # keep loop running at the right speed
-        clock.tick(fps)
+        clock.tick(gps)
         iteration += 1
         pygame.display.set_caption("The Game Of Life [iteration: {} fps: {:.1f}]".format(iteration, clock.get_fps()))
 
@@ -234,9 +234,9 @@ def main():
                         else:
                             easygui.msgbox("There was error during importing file:\n{}".format(pattern_file), "Error!")
                 elif event.key == pygame.K_DOWN:
-                    fps = fps - 1 if fps > FPS_MIN else FPS_MIN
+                    gps = gps - 1 if gps > GPS_MIN else GPS_MIN
                 elif event.key == pygame.K_UP:
-                    fps = fps + 1 if fps < FPS_MAX else FPS_MAX
+                    gps = gps + 1 if gps < GPS_MAX else GPS_MAX
                 elif event.key in (pygame.K_q, pygame.K_ESCAPE):
                     running = False
 
@@ -280,7 +280,7 @@ def main():
         display_game_info(surface, font, size, play)
         if debug:
             debug_info = {
-                "FPS": fps,
+                "FPS": gps,
                 "RUNNING": running,
                 "PLAY": play,
                 "DEBUG": debug,
